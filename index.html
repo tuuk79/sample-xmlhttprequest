@@ -1,0 +1,46 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+</head>
+
+<body>
+	<form id="postForm" name="postForm">
+		<input type="text" name="firstName" id="firstName">
+		<input type="text" name="lastName" id="lastName">
+		<button id="postButton" type="button" style="width:100px;height:20px" />
+	</form>
+
+	<p id="changedLastName"></p>
+
+	<script>
+		document.getElementById('postButton').addEventListener('click', function (e) {
+
+			var xhr = new XMLHttpRequest();
+			var form = new FormData(document.getElementById("postForm"))
+
+			xhr.open("POST", "/", true)
+
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+
+			// xhr.onload = function () {
+			// 	const serverResponse = document.getElementById("lastName")
+			// 	serverResponse.innerHTML = JSON.parse(this.responseText).status
+			// }
+
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					var returnData = JSON.parse(xhr.responseText);
+					document.getElementById('lastName').value = returnData.lastName
+				}
+			}
+
+			var firstName = document.getElementsByName('firstName')[0].value
+			var lastName = document.getElementsByName('lastName')[0].value
+
+			xhr.send(`firstName=${firstName}&lastName=${lastName}`)
+		})
+	</script>
+</body>
+
+</html>
